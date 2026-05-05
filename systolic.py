@@ -12,8 +12,8 @@ class SystolicArray:
                 self.weights[i][j] = B[i][j]
 
     def run(self, A, B):
- 
         size = self.size
+        total_mac=size * size * size
         self.load_weights(B)
         a_flow = [[0] * size for _ in range(size)]
         b_flow = [[0] * size for _ in range(size)]
@@ -56,7 +56,14 @@ class SystolicArray:
             a_flow = new_a_flow
             b_flow = new_b_flow
 
-        return C
+        stats = {
+        'mac_ops': total_mac,
+        'cycles': total_cycles,
+        'pe_utilization': total_mac / (size * size * total_cycles),
+        'throughput_gops': (total_mac / total_cycles) * 1e-9  
+             }
+
+        return C, stats
 
 
 # 测试
